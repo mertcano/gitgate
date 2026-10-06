@@ -252,6 +252,17 @@ export function validateConfig(config: Config): boolean {
     throw new ConfigError("Auth method is required");
   }
 
+  // "none" auth method is only allowed when explicitly opted in via
+  // ALLOW_NO_AUTH=true AND NODE_ENV !== "production".
+  // This prevents accidental unauthenticated deployments.
+  const allowNoAuth = process.env.ALLOW_NO_AUTH === "true";
+  const isProduction = process.env.NODE_ENV === "production";
+  if (config.auth.method === "none" && (!allowNoAuth || isProduction)) {
+    throw new ConfigError(
+      'Auth method "none" is not allowed. Set ALLOW_NO_AUTH=true (non-production only) to enable.'
+    );
+  }
+
   if (config.auth.method === "jamf") {
     if (!config.auth.jamf?.api_url || !config.auth.jamf?.api_key) {
       throw new ConfigError("Jamf configuration incomplete");
