@@ -2,6 +2,7 @@ import type { DeviceContext } from "../types";
 import { authenticateJamf } from "./jamf";
 import { authenticateTailscale } from "./tailscale";
 import { authenticateMTLS } from "./mtls";
+import { isNoAuthAllowed } from "./no-auth";
 
 export async function authenticateDevice(
   method: string,
