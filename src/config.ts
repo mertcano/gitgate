@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import type { Config } from "./types";
 import { ConfigError } from "./utils/errors";
 import { resolveSafePath, validateHttpsUrl } from "./utils/validation";
+import { isNoAuthAllowed } from "./auth/no-auth";
 
 let cachedConfig: Config | null = null;
 
